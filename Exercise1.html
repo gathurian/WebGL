@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Computer Graphics</title>
+    <script type="text/javascript" src="webgl-debug.js"></script>
+    <script type="text/javascript" src="shaderUtils.js"></script>
+    <script type="text/javascript" src="gl-matrix.js"></script>
+    <script type="text/javascript" src="Exercise1.js"></script>
+</head>
+    <body>
+        <h1>Computer Graphics</h1>
+            <canvas id="myCanvas" width="600" height="600"></canvas>
+        <h2>Bitte RGB Werte angeben </h2>
+        <form onabort="setUpBuffers()">
+            <h3>Oben links</h3>
+
+                <input type="number" id="TLR" min="0", max="255">
+                <input type="number" id="TLG" min="0", max="255">
+                <input type="number" id="TLB" min="0", max="255">
+
+            <h3>Oben Rechts</h3>
+
+                <input type="number" id="TRR" min="0", max="25">
+                <input type="number" id="TRG" min="0", max="255">
+                <input type="number" id="TRB" min="0", max="255">
+
+            <h3>Unten Links</h3>
+
+                <input type="number" id="BLR" min="0", max="255">
+                <input type="number" id="BLG" min="0", max="255">
+                <input type="number" id="BLB" min="0", max="255">
+
+            <h3>Unten Rechts</h3>
+
+                <input type="number" id="BRR" min="0", max="255">
+                <input type="number" id="BRG" min="0", max="255">
+                <input type="number" id="BRB" min="0", max="255">
+            <button>
+                <input type="submit" value="Draw">
+            </button>
+        </form>
+    </body>
+</html>
