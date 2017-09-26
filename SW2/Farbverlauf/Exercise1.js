@@ -42,7 +42,6 @@ function initGL() {
     setUpAttributesAndUniforms();
     setUpBuffers();
     gl.clearColor(0.75,0.75,0.75,1);
-    // add more necessary commands here
 }
 
 /**
