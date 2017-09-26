@@ -73,10 +73,10 @@ function setUpBuffers(){
 
     var verticesRectangle1 = [
         //Pos X, Y      Farbe R, G, B
-        0.5,-0.5,       1.0, 0.0, 1.0,
+        0.5,-0.5,       1.0, 0.0, 0.0,
         -0.5,-0.5,      1.0, 1.0, 1.0,
         -0.5,0.5,       0.0, 1.0, 0.0,
-        0.5,0.5,        0.0, 0.0, 0.0
+        0.5,0.5,        0.0, 0.0, 1.0
     ];
     gl.bindBuffer(gl.ARRAY_BUFFER, rectangleObject1.buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesRectangle1), gl.STATIC_DRAW);
@@ -101,7 +101,7 @@ function draw() {
     );
     gl.vertexAttribPointer(
         ctx.aColorId,
-        2,
+        3,
         gl.FLOAT,
         false,
         5 * Float32Array.BYTES_PER_ELEMENT,
