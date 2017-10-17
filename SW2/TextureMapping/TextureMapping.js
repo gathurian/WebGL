@@ -62,9 +62,19 @@ function setUpAttributesAndUniforms(){
  * Setup the buffers to use. If more objects are needed this should be split in a file per object.
  */
 function setUpBuffers(){
-    var vertices = [-0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5];
+    var vertices = [
+    -0.5, -0.5,
+    -0.5, 0.5,
+    0.5, 0.5,
+    0.5, -0.5
+    ];
 
-    var textureCoord = [0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0];
+    var textureCoord = [
+    0.0, 0.0,
+    0.0, 1.0,
+    1.0, 1.0,
+    1.0, 0.0
+    ];
 
     rectangleObject.buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, rectangleObject.buffer);
