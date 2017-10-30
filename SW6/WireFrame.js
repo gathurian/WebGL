@@ -50,9 +50,7 @@ function initGL() {
     setUpAttributesAndUniforms();
     setUpBuffers();
     gl.clearColor(1,0,0,0.5);
-    gl. frontFace (gl. CCW);
-    gl. cullFace (gl. BACK );
-    gl. enable (gl. CULL_FACE );
+
 }
 
 /**
@@ -180,7 +178,15 @@ var i = 0;
 function draw() {
     "use strict";
     console.log("Drawing");
-    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.frontFace (gl. CCW);
+    gl.cullFace (gl. BACK );
+    gl.enable (gl. CULL_FACE );
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+    gl.clearDepth(1.0);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
     var modelview = mat4.create();
@@ -192,7 +198,8 @@ function draw() {
     mat4.ortho(projectionview, -2, 2, -2, 2, -2, 10);
 
     var view = mat4.create();
-    mat4.fromYRotation(view, 0.2+i);
+    mat4.fromYRotation(view, i);
+    //console.log(i);
 
 
     gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
