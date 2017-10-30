@@ -144,7 +144,7 @@
 
          /*==================== Rotation ====================*/
 
-         function rotateZ(m, angle) {
+/*         function rotateZ(m, angle) {
             var c = Math.cos(angle);
             var s = Math.sin(angle);
             var mv0 = m[0], mv4 = m[4], mv8 = m[8];
@@ -170,7 +170,7 @@
             m[2] = m[2]*c+mv1*s;
             m[6] = m[6]*c+mv5*s;
             m[10] = m[10]*c+mv9*s;
-         }
+         }*/
 
          function rotateY(m, angle) {
             var c = Math.cos(angle);
@@ -192,9 +192,9 @@
          var animate = function(time) {
 
             var dt = time-time_old;
-            rotateZ(mov_matrix, dt*0.005);//time
+            //rotateZ(mov_matrix, dt*0.005);//time
             rotateY(mov_matrix, dt*0.002);
-            rotateX(mov_matrix, dt*0.003);
+            //rotateX(mov_matrix, dt*0.003);
             time_old = time;
 
             gl.enable(gl.DEPTH_TEST);

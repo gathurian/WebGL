@@ -64,6 +64,7 @@ function setUpAttributesAndUniforms(){
     ctx.aColorId = gl.getAttribLocation(ctx.shaderProgram, "aVertexColor");
     ctx.uModelViewMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uModelViewMatrix");
     ctx.uProjectionMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uProjectionMatrix");
+    ctx.uViewMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uViewMatrix");
 
 }
 
@@ -171,6 +172,8 @@ function setUpBuffers(){
 
 }
 
+var i = 0;
+
 /**
  * Draw the scene.
  */
@@ -179,15 +182,22 @@ function draw() {
     console.log("Drawing");
     gl.clear(gl.COLOR_BUFFER_BIT);
 
+
     var modelview = mat4.create();
     mat4.lookAt(modelview, [1.5, 1.5, 1.5], [0.5, 0.5, 0.5], [0, 1, 0]); //von woher wird geschaut?
     //                     Kamera-Ort   Zentrum         Wo ist oben?
 
+
     var projectionview = mat4.create();
     mat4.ortho(projectionview, -2, 2, -2, 2, -2, 10);
 
+    var view = mat4.create();
+    mat4.fromYRotation(view, 0.2+i);
+
+
     gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
     gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionview);
+    gl.uniformMatrix4fv(ctx.uViewMatrixId, false, view);
 
     // add drawing routines here
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -209,6 +219,9 @@ function draw() {
         3 * Float32Array.BYTES_PER_ELEMENT,
         0* Float32Array.BYTES_PER_ELEMENT
     );
+
+    window.requestAnimationFrame(draw)
+    i = i+0.01;
 
     gl.enableVertexAttribArray(ctx.aVertexPositionId);
     gl.enableVertexAttribArray(ctx.aColorId);
