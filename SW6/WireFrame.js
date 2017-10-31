@@ -14,20 +14,16 @@ var gl;
 var ctx = {
     shaderProgram: -1,
     aVertexPositionId: -1,
-    aColorId: -1
+    aColorId: -1,
+    aTextureId: -1
 };
 
-var vertexBuffer = {
-    buffer: -1
-};
+var cubeColor = 0;
 
-var edgeBuffer = {
-    buffer: -1
-};
+var cubeTexture = 0;
 
-var colorBuffer = {
-    buffer: -1
-};
+var i = 0;
+
 
 /**
  * Startup function to be called when the body is loaded
@@ -48,7 +44,7 @@ function initGL() {
     setUpAttributesAndUniforms();
     setUpBuffers();
     gl.clearColor(1,0,0,0.5);
-
+    gl.enable(gl.DEPTH_TEST);
 }
 
 /**
@@ -57,24 +53,45 @@ function initGL() {
 function setUpAttributesAndUniforms(){
     ctx.aVertexPositionId = gl.getAttribLocation(ctx.shaderProgram, "aVertexPosition");
     ctx.aColorId = gl.getAttribLocation(ctx.shaderProgram, "aVertexColor");
+    ctx.aTextureId = gl.getAttribLocation(ctx.shaderProgram, "a_texcoord");
     ctx.uModelViewMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uModelViewMatrix");
     ctx.uProjectionMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uProjectionMatrix");
-    ctx.uViewMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uViewMatrix");
-
 }
 
 /**
  * Setup the buffers to use. If morre objects are needed this should be split in a file per object.
  */
 function setUpBuffers(){
-   wiredCube = new WireFrameCube(gl);
+   //cubeColor = coloredCube(gl, -0.5, -0.5, -0.5 );
+   cubeTexture = texturedCube(gl, -0.5, -0.5, -0.5);
+
 }
 
-var i = 0;
+function matrixStuff(){
+    var modelview = mat4.create();
+    mat4.lookAt(modelview, [1.5, 1.5, 1.5], [0.5, 0.5, 0.5], [0, 1, 0]); //von woher wird geschaut?
+    //                     Kamera-Ort   Zentrum         Wo ist oben?
+
+    var projectionview = mat4.create();
+    mat4.ortho(projectionview, -2, 2, -2, 2, -10, 10);
+
+    mat4.translate(modelview, modelview, [-1.75, -0.75, 0])
+
+
+    mat4.rotate(modelview, modelview, i, [1, 1, 0]);
+
+    gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
+    gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionview);
+}
 
 /**
  * Draw the scene.
  */
 function draw() {
-    wiredCube.draw(gl, ctx.aVertexPositionId, ctx.aVertexPositionId);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    matrixStuff();
+    //cubeColor.draw(gl, ctx.aVertexPositionId, ctx.aColorId);
+    cubeTexture.draw(gl, ctx.aVertexPositionId, ctx.aColorId, ctx.aTextureId);
+    window.requestAnimationFrame(draw)
+    i = i+0.05;
 }

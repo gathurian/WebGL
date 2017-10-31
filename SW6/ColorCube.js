@@ -1,36 +1,36 @@
-function WireFrameCube(gl){
-    function defineVertices(gl){
+function coloredCube(gl, X, Y, Z){
+    function defineVertices(gl  ){
         var vertices = [
                 //Pos X, Y, Z
-                0, 0, 0,
-                0, 0 ,1,    //bottom
-                1, 0, 1,
-                1, 0, 0,
+                X, Y, Z,
+                X, Y, Z+1,
+                X+1, Y, Z+1,    //bottom
+                X+1, Y, Z,
 
-                0, 1, 0,
-                0, 1, 1,    //top
-                1, 1, 1,
-                1, 1, 0,
+                X, Y+1, Z,
+                X, Y+1, Z+1,
+                X+1, Y+1, Z+1,  //top
+                X+1, Y+1, Z,
 
-                0, 0, 1,
-                1, 0, 1,    //front
-                1, 1, 1,
-                0, 1, 1,
+                X, Y, Z+1,
+                X+1, Y, Z+1,
+                X+1, Y+1, Z+1,  //front
+                X, Y+1, Z+1,
 
-                0, 0, 0,
-                1, 0, 0,    //back
-                1, 1, 0,
-                0, 1, 0,
+                X, Y, Z,
+                X+1, Y, Z,
+                X+1, Y+1, Z,    //back
+                X, Y+1, Z,
 
-                0, 0, 0,
-                0, 0, 1,    //left
-                0, 1, 1,
-                0, 1, 0,
+                X, Y, Z,
+                X, Y, Z+1,
+                X, Y+1, Z+1,    //left
+                X, Y+1, Z,
 
-                1, 0, 1,
-                1, 0, 0,    //right
-                1, 1, 0,
-                1, 1, 1
+                X+1, Y, Z+1,
+                X+1, Y, Z,
+                X+1, Y+1, Z,    //right
+                X+1, Y+1, Z+1
             ];
 
         vertexBuffer = gl.createBuffer();
@@ -102,43 +102,19 @@ function WireFrameCube(gl){
             colorBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesColor), gl.STATIC_DRAW);
+
+            return colorBuffer
         }
 
+
+
     return {
-        bufferVertices : defineVertices (gl),
-        bufferEdges : defineEdges (gl),
-        color : defineColors (gl),
-        draw: function(gl, aVertexPositionId, aVertexColorId){                console.log("Drawing");
-
-                gl.frontFace (gl. CCW);
-                gl.cullFace (gl. BACK );
-                gl.enable (gl. CULL_FACE );
-                gl.enable(gl.DEPTH_TEST);
-                gl.depthFunc(gl.LEQUAL);
-                gl.clearDepth(1.0);
-
-                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-
-                var modelview = mat4.create();
-                mat4.lookAt(modelview, [1.5, 1.5, 1.5], [0.5, 0.5, 0.5], [0, 1, 0]); //von woher wird geschaut?
-                //                     Kamera-Ort   Zentrum         Wo ist oben?
-
-
-                var projectionview = mat4.create();
-                mat4.ortho(projectionview, -2, 2, -2, 2, -2, 10);
-
-                var view = mat4.create();
-                mat4.fromYRotation(view, i);
-                //console.log(i);
-
-
-                gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
-                gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionview);
-                gl.uniformMatrix4fv(ctx.uViewMatrixId, false, view);
-
+        bufferVertices : defineVertices(gl),
+        bufferEdges : defineEdges(gl),
+        color : defineColors(gl),
+        draw: function(gl, aVertexPositionId, aVertexColorId){
                 // add drawing routines here
-                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+                gl.bindBuffer(gl.ARRAY_BUFFER,this.bufferVertices);
                 gl.vertexAttribPointer(
                     ctx.aVertexPositionId,              //Welche ID soll verwendet werden
                     3,                                  //Wie viele Werte sollen ausgelesen werden (3, da "x", "y", "z")
@@ -147,8 +123,9 @@ function WireFrameCube(gl){
                     3 * Float32Array.BYTES_PER_ELEMENT, //Nach wie vielen Werten kommt der nächste zu nehmende Wert? (x, y, z = 3)
                     0                                   //Wie viele Werte sollen am Anfang jeweils übersprungen werden?
                 );
+                gl.enableVertexAttribArray(ctx.aVertexPositionId);
 
-                gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+                gl.bindBuffer(gl.ARRAY_BUFFER,this.color);
                 gl.vertexAttribPointer(
                     ctx.aColorId,
                     3,
@@ -157,13 +134,11 @@ function WireFrameCube(gl){
                     3 * Float32Array.BYTES_PER_ELEMENT,
                     0* Float32Array.BYTES_PER_ELEMENT
                 );
-
-                window.requestAnimationFrame(draw)
-                i = i+0.01;
-
-                gl.enableVertexAttribArray(ctx.aVertexPositionId);
                 gl.enableVertexAttribArray(ctx.aColorId);
-                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, edgeBuffer);
+
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferEdges);
+
+                gl.bindTexture(gl.TEXTURE_2D, null);
                 gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
         }
