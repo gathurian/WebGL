@@ -4,15 +4,15 @@ function wireCube(gl, X, Y, Z) {
         var vertices = [
             0, 0, 0,
             1, 0, 0,
-            1, 1, 0,
+            1, 1, 0,        //Bottom
             0, 1, 0,
 
             0, 0, 1,
             1, 0, 1,
-            1, 1, 1,
-            0, 1, 1,
+            1, 1, 1,        //Top
+            0, 1, 1
         ];
-        var vertexBuffer = gl.createBuffer();
+        vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
@@ -20,7 +20,6 @@ function wireCube(gl, X, Y, Z) {
     }
 
     function defineEdges(gl) {
-
         var edges = [
             0, 1,
             0, 3,
@@ -58,23 +57,7 @@ function wireCube(gl, X, Y, Z) {
 
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferEdges);
 
-            var view = mat4.create();
-            var matrix = mat4.create();
-            var cameraPos = [0, 0, -2];
-            var center = [0, 0, 0];
-            var up = [0, 1, 0];
-
-            mat4.lookAt(view, cameraPos, center, up);
-
-            var projectionMatrix = mat4.create();
-
-            mat4.ortho(projectionMatrix, -2, 2, -2, 2, -10, 10);
-
-            mat4.translate(matrix, matrix, [X, Y, Z]);
-            mat4.rotate(matrix, matrix, i, [1, 1, 1]);
-
-            gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionMatrix);
-            gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, matrix);
+            matrixStuff(X, Y, Z);
 
             gl.bindTexture(gl.TEXTURE_2D, null);
 

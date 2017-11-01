@@ -1,37 +1,36 @@
 function coloredCube(gl, X, Y, Z){
     function defineVertices(gl  ){
         var vertices = [
-                //Pos X, Y, Z
-                X, Y, Z,
-                X, Y, Z+1,
-                X+1, Y, Z+1,    //bottom
-                X+1, Y, Z,
+            0, 0, 0,
+            0, 0 ,1,    //bottom
+            1, 0, 1,
+            1, 0, 0,
 
-                X, Y+1, Z,
-                X, Y+1, Z+1,
-                X+1, Y+1, Z+1,  //top
-                X+1, Y+1, Z,
+            0, 1, 0,
+            0, 1, 1,    //top
+            1, 1, 1,
+            1, 1, 0,
 
-                X, Y, Z+1,
-                X+1, Y, Z+1,
-                X+1, Y+1, Z+1,  //front
-                X, Y+1, Z+1,
+            0, 0, 1,
+            1, 0, 1,    //front
+            1, 1, 1,
+            0, 1, 1,
 
-                X, Y, Z,
-                X+1, Y, Z,
-                X+1, Y+1, Z,    //back
-                X, Y+1, Z,
+            0, 0, 0,
+            1, 0, 0,    //back
+            1, 1, 0,
+            0, 1, 0,
 
-                X, Y, Z,
-                X, Y, Z+1,
-                X, Y+1, Z+1,    //left
-                X, Y+1, Z,
+            0, 0, 0,
+            0, 0, 1,    //left
+            0, 1, 1,
+            0, 1, 0,
 
-                X+1, Y, Z+1,
-                X+1, Y, Z,
-                X+1, Y+1, Z,    //right
-                X+1, Y+1, Z+1
-            ];
+            1, 0, 1,
+            1, 0, 0,    //right
+            1, 1, 0,
+            1, 1, 1
+        ];
 
         vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -106,8 +105,6 @@ function coloredCube(gl, X, Y, Z){
             return colorBuffer
         }
 
-
-
     return {
         bufferVertices : defineVertices(gl),
         bufferEdges : defineEdges(gl),
@@ -136,11 +133,12 @@ function coloredCube(gl, X, Y, Z){
                 );
                 gl.enableVertexAttribArray(ctx.aColorId);
 
+                matrixStuff(X, Y, Z)
+
                 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.bufferEdges);
 
                 gl.bindTexture(gl.TEXTURE_2D, null);
                 gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
-
         }
     }
 }
