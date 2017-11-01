@@ -25,6 +25,8 @@ var edgeBuffer = {
     buffer: -1
 };
 
+var i = 0;
+
 /**
  * Startup function to be called when the body is loaded
  */
@@ -121,6 +123,10 @@ function draw() {
     var projectionview = mat4.create();
     mat4.ortho(projectionview, -2, 2, -2, 2, -2, 10);
 
+    mat4.rotate(modelview, modelview, i, [1, 1, 1]);
+
+    i += 0.05;
+
     gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
     gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionview);
 
@@ -138,5 +144,5 @@ function draw() {
     gl.enableVertexAttribArray(ctx.aVertexPositionId);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, edgeBuffer);
     gl.drawElements(gl.LINES, 24, gl.UNSIGNED_SHORT, 0);
-
+    window.requestAnimationFrame(draw)
 }

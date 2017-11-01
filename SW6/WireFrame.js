@@ -22,6 +22,8 @@ var cubeColor = 0;
 
 var cubeTexture = 0;
 
+var cubeWire = 0;
+
 var i = 0;
 
 
@@ -53,7 +55,8 @@ function initGL() {
 function setUpAttributesAndUniforms(){
     ctx.aVertexPositionId = gl.getAttribLocation(ctx.shaderProgram, "aVertexPosition");
     ctx.aColorId = gl.getAttribLocation(ctx.shaderProgram, "aVertexColor");
-    ctx.aTextureId = gl.getAttribLocation(ctx.shaderProgram, "a_texcoord");
+    ctx.aTextureId = gl.getAttribLocation(ctx.shaderProgram, "aVertexTextureCoord");
+    ctx.uSampler = gl.getUniformLocation(ctx.shaderProgram, "uSampler");
     ctx.uModelViewMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uModelViewMatrix");
     ctx.uProjectionMatrixId = gl.getUniformLocation(ctx.shaderProgram, "uProjectionMatrix");
 }
@@ -62,26 +65,28 @@ function setUpAttributesAndUniforms(){
  * Setup the buffers to use. If morre objects are needed this should be split in a file per object.
  */
 function setUpBuffers(){
-   //cubeColor = coloredCube(gl, -0.5, -0.5, -0.5 );
-   cubeTexture = texturedCube(gl, -0.5, -0.5, -0.5);
+   cubeColor = coloredCube(gl, -0.5, -0.5, -0.5 );
+   cubeTexture = texturedCube(gl, 1.15, -0.5, 0);
+   cubeWire = wireCube(gl, 0, 0.75, 0);
 
 }
 
 function matrixStuff(){
     var modelview = mat4.create();
-    mat4.lookAt(modelview, [1.5, 1.5, 1.5], [0.5, 0.5, 0.5], [0, 1, 0]); //von woher wird geschaut?
+    mat4.lookAt(modelview, [0, 0, -2], [0, 0, 0], [0, 1, 0]); //von woher wird geschaut?
     //                     Kamera-Ort   Zentrum         Wo ist oben?
 
     var projectionview = mat4.create();
     mat4.ortho(projectionview, -2, 2, -2, 2, -10, 10);
 
-    mat4.translate(modelview, modelview, [-1.75, -0.75, 0])
+    mat4.translate(modelview, modelview, [1, -0.5, 0])
 
 
-    mat4.rotate(modelview, modelview, i, [1, 1, 0]);
+    mat4.rotate(modelview, modelview, i, [1, 1, 1]);
 
     gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
     gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionview);
+    i += 0.05;
 }
 
 /**
@@ -89,9 +94,9 @@ function matrixStuff(){
  */
 function draw() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    cubeWire.draw(gl, ctx.aVertexPositionId);
     matrixStuff();
-    //cubeColor.draw(gl, ctx.aVertexPositionId, ctx.aColorId);
+    cubeColor.draw(gl, ctx.aVertexPositionId, ctx.aColorId);
     cubeTexture.draw(gl, ctx.aVertexPositionId, ctx.aColorId, ctx.aTextureId);
     window.requestAnimationFrame(draw)
-    i = i+0.05;
 }
