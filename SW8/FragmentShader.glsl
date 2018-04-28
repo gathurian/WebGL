@@ -8,8 +8,6 @@ uniform vec3 uLightColor;
 
 varying vec3 vNormalEye;
 varying vec3 vVertexPositionEye3;
-varying vec3 vLighting;
-
 
 varying vec3 vColor;
 varying vec2 vTextureCoord;
@@ -24,12 +22,7 @@ const vec3 specularMaterialColor = vec3(0.4, 0.4, 0.4);
     gl_FragColor = texture2D(uSampler, vTextureCoord) + vec4(vColor, 1.0);
 }*/
 
-void main(){
-    vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-    gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
-}
 
-/*
 void main(){
     vec3 baseColor = vColor;
     if(uEnableTexture){
@@ -41,28 +34,28 @@ void main(){
         vec3 ambientColor = ambientFactor * baseColor.rgb;
 
         //calculate light direction as seen from the vertex position
-        vec3 lightDirectionEye = ; //todo
+        vec3 lightDirectionEye = vec3(1.0, 1.0, 1.0); //todo
         vec3 normal = normalize(vNormalEye);
 
         //diffuse lighting
-        float diffuseFactor = ; //todo
-        vec3 diffuseColor = ; //todo;
+        float diffuseFactor = 0.0; //todo
+        vec3 diffuseColor = vec3(0.5, 0.5, 0.5) ; //todo;
 
 
         //specular lighting
         vec3 specularColor = vec3(0,0,0);
 
-            if(diffuseFactor > 0.0){
-                         vec3 reflectionDir = ; //todo
-                         vec3 eyeDir = ; //todo
-                         float cosPhih = ; //todo
-                         float specularFactor = ; //todo
-                         specularColor = ; //todo
-            }
+/*        if(diffuseFactor > 0.0){
+                     vec3 reflectionDir = (1, 1, 1); //todo
+                     vec3 eyeDir = (1, 1, 1); //todo
+                     float cosPhih = 0.0; //todo
+                     float specularFactor = 0.4; //todo
+                     specularColor = (0, 0, 0); //todo
+        }*/
 
         vec3 color = ambientColor + diffuseColor + specularColor;
         gl_FragColor = vec4(color, 1.0);
     } else {
         gl_FragColor = vec4(baseColor, 1.0);
     }
-}*/
+}

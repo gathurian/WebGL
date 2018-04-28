@@ -79,7 +79,7 @@ function matrixStuff(X, Y, Z){
     var projectionview = mat4.create();
     mat4.ortho(projectionview, -2, 2, -2, 2, -10, 10);
 
-    mat4.translate(modelview, modelview, [X, Y, Z])
+    mat4.translate(modelview, modelview, [X, Y, Z]);
 
     mat4.rotate(modelview, modelview, i, [1, 1, 1]);
 

@@ -24,6 +24,8 @@ var cubeTexture = 0;
 
 var cubeWire = 0;
 
+var sphere = 0;
+
 var i = 0;
 
 
@@ -67,9 +69,11 @@ function setUpAttributesAndUniforms(){
  * Setup the buffers to use. If morre objects are needed this should be split in a file per object.
  */
 function setUpBuffers(){
-   cubeColor = coloredCube(gl, -1.5, -1, 0);
-   cubeTexture = texturedCube(gl, 0.5, -1, 0);
-   cubeWire = wireCube(gl, -0.5, 0.5, 0);
+    sphere = SolidSphere(gl, 3, 3);
+    cubeColor = coloredCube(gl, -1.5, -1, 0);
+    //cubeTexture = texturedCube(gl, 0.5, -1, 0);
+    cubeWire = wireCube(gl, -0.5, 0.5, 0);
+  // sphere = SolidSphere(gl, 3, 3);
 
 }
 
@@ -82,16 +86,18 @@ function matrixStuff(X, Y, Z){
     var projectionview = mat4.create();
     mat4.ortho(projectionview, -2, 2, -2, 2, -10, 10);
 
-    mat4.translate(modelview, modelview, [X, Y, Z])
+    mat4.translate(modelview, modelview, [X, Y, Z]);
 
     mat4.rotate(modelview, modelview, i, [1, 1, 1]);
 
-    var normalMatrix = modelview.inverse();
-    normalMatrix = normalMatrix.transpose();
+    var normalMatrix = mat4.create();
+
+    mat4.invert(normalMatrix, modelview);
+    //mat4.transpose(normalMatrix);
 
     gl.uniformMatrix4fv(ctx.uModelViewMatrixId, false, modelview);
     gl.uniformMatrix4fv(ctx.uProjectionMatrixId, false, projectionview);
-    gl.uniformMatrix4fv(ctx.uNormalMatrixId, false, new WebGLFLoatArray(normalMatrix.flatten()));
+    //gl.uniformMatrix4fv(ctx.uNormalMatrixId, false, new WebGLFLoatArray(normalMatrix.flatten()));
 }
 
 /**
